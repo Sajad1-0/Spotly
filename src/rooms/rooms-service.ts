@@ -1,27 +1,71 @@
 import { CreateRoom, UpdateRoom } from "../interfaces/room-interface";
 import { roomRepository } from "./rooms-Repository";
+import NodeCache from "node-cache";
 
 const roomService = new roomRepository();
+const roomCache = new NodeCache({stdTTL: 600, checkperiod:120}) 
 
 export class RoomService {
+
+    private getCachKey(id?: string ): string {
+        return id ? `room:${id}` : 'allRooms'
+    }
     async create(room: CreateRoom) {
-        return await roomService.create(room)
+        
+        const createRooms = await roomService.create(room)
+
+        // Rensa relevant cache
+        roomCache.del(this.getCachKey())
+        return createRooms; 
     }
 
     async getAllRooms() {
-        return await roomService.findAllRooms()
+        const cacheKey = this.getCachKey();
+        const cachedRooms = await roomCache.get(cacheKey);
+
+        if (cachedRooms) {
+            return cachedRooms
+        }
+
+        console.log('Fetching data from Database...')
+        const rooms = await roomService.findAllRooms()
+
+        roomCache.set(cacheKey, rooms)
+        return rooms
     }
 
     async findOneRoomById(id: string) {
-        return await roomService.findOne(id)
+        const cacheKey = this.getCachKey(id);
+        const cachedRoom = await roomCache.get(cacheKey);
+
+        if (cachedRoom) {            
+            return cachedRoom
+        }
+
+        console.log('Fetching data from Database...')
+        const room = await roomService.findOne(id)
+
+        roomCache.set(cacheKey, room)
+        return room
     }
 
     async updateRoom(id: string, updateRoom: UpdateRoom) {
-        return await roomService.update(id, updateRoom)
+
+        const roomUpdate = await roomService.update(id, updateRoom)
+
+        roomCache.del(this.getCachKey(id));
+        roomCache.del(this.getCachKey());
+        return roomUpdate
 
     }
 
     async deleteRoom(id: string) {
-        return await roomService.delete(id)
+
+        const deletedRoom = await roomService.delete(id)
+
+        roomCache.del(this.getCachKey(id));
+        roomCache.del(this.getCachKey());
+        
+        return deletedRoom
     }
 }

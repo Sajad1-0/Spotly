@@ -17,6 +17,7 @@ export interface UpdateBooking {
 }
 
 export interface CreateBookings extends Omit<Booking, 'id'> {}
+export interface Bookings extends Omit<Booking, 'id'> {}
 
 export interface JwtToken {
     userID: string,

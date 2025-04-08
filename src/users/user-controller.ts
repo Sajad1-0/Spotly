@@ -32,8 +32,8 @@ export const findAllUsers = async (req: any, res: Response) => {
     }
 
     try {
-        const userID = await userService.findAllUsers()
-        res.status(httpCodeStatus.OK).json(userID)
+        const userId = await userService.findAllUsers()
+        res.status(httpCodeStatus.OK).json(userId)
     }
     catch(error) {
         res.status(httpCodeStatus.NOT_FOUND).json({

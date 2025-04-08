@@ -17,7 +17,7 @@ export class BookingService {
         }
 
         const checkRoomAvailability = await bookingService.findBookingByRoomIdAndDate(
-            createBooking.roomID,
+            createBooking.roomId,
             createBooking.startTime,
             createBooking.endTime
         )
@@ -76,8 +76,8 @@ export class BookingService {
         bookingCache.del(this.getCachKey(id)) // update the updated booking
         bookingCache.del(this.getCachKey()) // Update all bookings
 
-        if(updateBooking.roomID) {
-            bookingCache.del(`room: ${updateBooking.roomID}: availability`)
+        if(updateBooking.roomId) {
+            bookingCache.del(`room: ${updateBooking.roomId}: availability`)
         }
 
         return this.findOne(id)
@@ -92,8 +92,8 @@ export class BookingService {
         bookingCache.del(this.getCachKey(id)) // delete one booking
         bookingCache.del(this.getCachKey())
         
-        if (booking.roomID) {
-            bookingCache.del(`room: ${booking.roomID}: availibility`)
+        if (booking.roomId) {
+            bookingCache.del(`room: ${booking.roomId}: availibility`)
         }
 
         return {id, deleted: true};

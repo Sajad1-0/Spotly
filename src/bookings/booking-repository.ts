@@ -47,7 +47,7 @@ export class bookingRepository {
         endTime:string) {
             return await db.select()
             .from(bookingSchema)
-            .where(and(eq(bookingSchema.roomID, roomId),
+            .where(and(eq(bookingSchema.roomId, roomId),
             or(
                 and(
                     lte(bookingSchema.startTime, endTime),
@@ -62,7 +62,7 @@ export class bookingRepository {
 
     async delete(id: string): Promise<string> {
         if(!id) {
-            throw new Error('Booking ID required!')
+            throw new Error('Booking Id required!')
         }
         const deleteBooking = await db.delete(bookingSchema)
         .where(eq(bookingSchema.id, id))

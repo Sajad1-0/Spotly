@@ -60,7 +60,7 @@ export class userRepository {
 
     async delete(id: string): Promise<string> {
         if (!id) {
-            throw new Error('User ID required')
+            throw new Error('User Id required')
         }
 
         const deleteUser = await db.delete(userSchema)

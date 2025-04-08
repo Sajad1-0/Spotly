@@ -14,8 +14,8 @@ export class roomRepository {
     async create(createRoom: CreateRoom): Promise<string> {
         const CreatingRoom = await db.insert(roomsSchema)
         .values(createRoom)
-        .returning({insertedID: roomsSchema.id})
-        return CreatingRoom[0].insertedID;
+        .returning({insertedId: roomsSchema.id})
+        return CreatingRoom[0].insertedId;
     } 
 
     // updating rooms
@@ -58,7 +58,7 @@ export class roomRepository {
     async delete(id: string): Promise<string> {
 
         if(!id) {
-            throw new Error('Room ID is required!')
+            throw new Error('Room Id is required!')
         }
         const deleteRooms = await db.delete(roomsSchema)
         .where(eq(roomsSchema.id, id))

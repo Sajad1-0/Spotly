@@ -3,15 +3,15 @@ import { Request } from "express";
 
 export interface Booking {
     id: string;
-    roomID: string;
-    userID: string;
+    roomId: string;
+    userId: string;
     startTime: string;
     endTime: string;
 }
 
 export interface UpdateBooking {
-    roomID?: string;
-    userID?: string;
+    roomId?: string;
+    userId?: string;
     startTime?: string;
     endTime?: string;
 }
@@ -20,7 +20,7 @@ export interface CreateBookings extends Omit<Booking, 'id'> {}
 export interface Bookings extends Omit<Booking, 'id'> {}
 
 export interface JwtToken {
-    userID: string,
+    userId: string,
     role: Role,
 }
 

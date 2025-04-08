@@ -51,7 +51,7 @@ export const findBookingById = async (req: Request, res: Response) => {
         
         if(!bookingId) {
             res.status(httpCodeStatus.BAD_REQUEST).json({
-                message: 'The booking required ID'
+                message: 'The booking required Id'
             })
         }
         res.status(httpCodeStatus.OK).json({
@@ -72,7 +72,7 @@ export const deleteBookingById = async (req: Request, res: Response) => {
 
         if(!bookingId) {
             res.status(httpCodeStatus.BAD_REQUEST).json({
-                message: 'Booking ID required'
+                message: 'Booking Id required'
             })
             return
         }
@@ -97,7 +97,7 @@ export const updateBookingById = async (
 
             if(!updateId) {
                 res.status(httpCodeStatus.BAD_REQUEST).json({
-                    message: 'Booking ID Required'
+                    message: 'Booking Id Required'
                 })
                 return
             }

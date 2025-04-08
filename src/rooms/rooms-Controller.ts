@@ -39,7 +39,7 @@ export const deleteRoomById = async (req: any, res: Response) => {
 
     if(!deleteRoom) {
         res.status(httpCodeStatus.BAD_REQUEST).json({
-            message: 'Room ID is required'
+            message: 'Room Id is required'
         })
         return
     }
@@ -93,7 +93,7 @@ export const updateRoomById = async (req: any, res: Response) => {
 
         if(!updateId) {
             res.status(httpCodeStatus.BAD_REQUEST).json({
-                message: 'Room ID is required'
+                message: 'Room Id is required'
             })
             return
         }

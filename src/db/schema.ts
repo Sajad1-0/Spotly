@@ -27,8 +27,8 @@ export const roomsSchema = pgTable("rooms", {
 
 export const bookingSchema = pgTable("bookings", {
     id: uuid().defaultRandom().primaryKey(),
-    roomID: uuid().references(() => roomsSchema.id).notNull(),
-    userID: uuid().references(() => userSchema.id).notNull(),
+    roomId: uuid().references(() => roomsSchema.id).notNull(),
+    userId: uuid().references(() => userSchema.id).notNull(),
     startTime: timestamp({ mode: 'string' }).notNull(),
     endTime: timestamp({ mode: 'string' }).notNull()
 })

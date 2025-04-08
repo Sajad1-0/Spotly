@@ -10,13 +10,12 @@ export const authorizeForOwners = async (req: AuthenticateRequest, res: Response
     
     const bookingId = req.params.id;
     const {userId: requesterUserId, role} = req.jwtPayload || {}
-    console.log('Hej Resmus',req.jwtPayload)
+    
 
     if(role === Role.Admin) next()
         
     const {userId: ownerUserId} = await bookingService.findOne(bookingId);
-    console.log( 'Helloo', ownerUserId);
-    console.log('shuu', requesterUserId)
+    
     if(requesterUserId === ownerUserId) return next();
 
     res.status(httpCodeStatus.NOT_AUTHORIZED)

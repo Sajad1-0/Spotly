@@ -40,13 +40,13 @@ export const findAllBookings = async (req: any, res: Response) => {
                 return
             }
 
-            const formattedBookings = userBookings.map((booking: any) => ([
-                booking.id,
-                booking.roomId,
-                booking.userId,
-                booking.startTime,
-                booking.endTime
-            ]))
+            const formattedBookings = userBookings.map((booking: any) => ({
+                id: booking.id,
+                roomId: booking.roomId,
+                userId: booking.userId,
+                startTime: booking.startTime,
+                endTime: booking.endTime
+            }))
 
             res.status(httpCodeStatus.OK).send(formattedBookings);
         }

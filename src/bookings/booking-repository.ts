@@ -28,6 +28,12 @@ export class bookingRepository {
         return await db.select().from(bookingSchema);
     }
 
+    async findBookingsByUserId(userId: string): Promise<CreateBookings[]> {
+        return await db.select()
+        .from(bookingSchema)
+        .where(eq(bookingSchema.userId, userId))
+    }
+
     async findOneBooking(id: string): Promise<CreateBookings> {
         const bookingId = await db.select()
         .from(bookingSchema)

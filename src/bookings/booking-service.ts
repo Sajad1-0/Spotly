@@ -54,6 +54,23 @@ export class BookingService {
         return bookings
     }
 
+    async findByUserId(userId: string): Promise<Bookings[]> {
+        const cacheKey = this.getCachKey(userId);
+        const cachedBookings = bookingCache.get<Bookings[]>(cacheKey);
+
+        if (cachedBookings) {
+            console.log('Returns bookings from cache')
+            return cachedBookings
+        }
+
+        console.log('Fetching data from Database...')
+
+        const bookings = await bookingService.findBookingsByUserId(userId);
+        bookingCache.set(cacheKey, bookings);
+
+        return bookings
+    }
+
     async findOne(id: string): Promise<Bookings> {
         const cacheKey = this.getCachKey(id);
         const cached = bookingCache.get<Bookings>(cacheKey)

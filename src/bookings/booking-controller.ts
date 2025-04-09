@@ -24,22 +24,36 @@ export const createBooking = async (req: Request, res: Response) => {
 
 // get all bookings
 export const findAllBookings = async (req: any, res: Response) => {
+    const {role, userId} = req.jwtPayload || {}
 
-    const userRoleFromToken = req.jwtPayload?.role;
-
-    if(userRoleFromToken !== 'Admin') {
-        res.status(httpCodeStatus.NOT_AUTHORIZED).send(`
-            ${userRoleFromToken}s aren't allowed to see all bookings,
-            only Admins are allowed!`)
-    }
 
     try {
-        const bookingId = await bookingController.findAll()
-        res.status(httpCodeStatus.OK).json(bookingId)
+        if (role === 'Admin') {
+            const bookings = await bookingController.findAll()
+            res.status(httpCodeStatus.OK).json(bookings)
+        } else {
+            const userBookings = await bookingController.findByUserId(userId);
+
+            if (!userBookings || userBookings.length === 0) {
+                res.status(httpCodeStatus.NOT_FOUND).send(`
+                    ${userId} has no bookings!`)
+                return
+            }
+
+            const formattedBookings = userBookings.map((booking: any) => ([
+                booking.id,
+                booking.roomId,
+                booking.userId,
+                booking.startTime,
+                booking.endTime
+            ]))
+
+            res.status(httpCodeStatus.OK).send(formattedBookings);
+        }
     }
     catch(err) {
-        res.status(httpCodeStatus.NOT_FOUND).json({
-            error: (err as Error).message
+        res.status(httpCodeStatus.INTERNAL_SERVER_ERROR).json({
+            err:'Something went wrong'
         })
     }
 }

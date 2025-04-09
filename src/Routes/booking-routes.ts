@@ -5,7 +5,6 @@ import {
     deleteBookingById, 
     findBookingById, 
     updateBookingById} from "../bookings/booking-controller";
-import { authorize } from "../middlewares/authorize-utils";
 import { authorizeForOwners } from "../middlewares/authorize-for-owners";
 
 const router = Router()

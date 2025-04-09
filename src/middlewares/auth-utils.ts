@@ -20,7 +20,7 @@ export class AuthUtils {
 
     async generateToken(userId: string, role: Role, username: string): Promise<string> {
         const payload = { userId, username, role};
-        return jwt.sign(payload, secret, {expiresIn: '15m'});
+        return jwt.sign(payload, secret, {expiresIn: '60m'});
     }
 
 

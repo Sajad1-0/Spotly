@@ -8,9 +8,17 @@ const bookingController = new BookingService
 export const createBooking = async (req: Request, res: Response) => {
     try {
         const bookingId = await bookingController.create(req.body)
+
+        // Emit Socket.io event
+        const io = req.app.get('io')
+        io.emit('create_booking', {
+            message: 'Booking has been created',
+            booking: bookingId
+        })
+
         console.log(bookingId)
         res.status(httpCodeStatus.CREATED).json({
-            message: 'You succesfully create a booking',
+            message: 'You succesfully create a booking', bookingId
         })
     }
     catch(err) {
@@ -90,6 +98,13 @@ export const deleteBookingById = async (req: Request, res: Response) => {
             })
             return
         }
+
+        const io = req.app.get('io')
+        io.emit('delete_booking', {
+            message: 'Booking has been deleted!',
+            booking: bookingId
+        })
+        
         res.status(httpCodeStatus.OK).json({
             message: 'Booking has been deleted', bookingId
         })
@@ -115,6 +130,13 @@ export const updateBookingById = async (
                 })
                 return
             }
+
+            const io = req.app.get('io')
+            io.emit('update_booking', {
+                message: 'Booking has been updated!',
+                booking: updateId
+            })
+
             res.status(httpCodeStatus.OK).json({
                 message: 'Booking has been updated', updateId
             })

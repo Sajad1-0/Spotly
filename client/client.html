@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Booking System - Client</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Booking System - Notifications</h1>
+
+  <div>
+    <h3>Status: <span id="status" class="disconnected">Disconnected</span></h3>
+  </div>
+
+  <div id="notifications">
+    <!-- Notifications will appear here -->
+  </div>
+
+  <script src="https://cdn.socket.io/4.7.2/socket.io.min.js"></script>
+  <script>
+    const statusElement = document.getElementById('status');
+    const notificationsElement = document.getElementById('notifications');
+
+    const socket = io('http://localhost:0216', {
+      reconnectionAttempts: 5,
+      reconnectionDelay: 1000,
+    });
+
+    socket.on('connect', () => {
+      statusElement.textContent = 'Connected';
+      statusElement.className = 'connected';
+      addSystemNotification('Connected to the server');
+    });
+
+    socket.on('disconnect', () => {
+      statusElement.textContent = 'Disconnected';
+      statusElement.className = 'disconnected';
+      addSystemNotification('Disconnected from the server');
+    });
+
+    socket.on('connect_error', (err) => {
+      addSystemNotification(`Connection error: ${err.message}`, 'error');
+    });
+
+    // CREATE BOOKING
+    socket.on('create_booking', (data) => {
+      addBookingNotification('Booking Created', data.booking, 'created', data.message);
+    });
+
+    // UPDATE BOOKING
+    socket.on('update_booking', (data) => {
+      addBookingNotification('Booking Updated', data.booking, 'updated', data.message);
+    });
+
+    // DELETE BOOKING
+    socket.on('delete_booking', (data) => {
+      addBookingNotification('Booking Deleted', data.booking, 'deleted', data.message);
+    });
+
+    function addBookingNotification(title, booking, type, message = '') {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US');
+
+      const notificationHTML = `
+        <div class="notification ${type}">
+          <div class="notification-header">
+            <span class="notification-title">${title}</span>
+            <span class="notification-time">${timeString}</span>
+          </div>
+          <p>${message || ''}</p>
+          <div class="booking-details">
+            <div class="detail-row">
+              <span class="detail-label">Booking ID:</span>
+              <span class="detail-value">${booking.id}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Room ID:</span>
+              <span class="detail-value">${booking.roomId}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">User ID:</span>
+              <span class="detail-value">${booking.userId}</span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Status:</span>
+              <span class="detail-value">${booking.deleted ? 'Deleted' : 'Active'}</span>
+            </div>
+          </div>
+        </div>
+      `;
+
+      notificationsElement.insertAdjacentHTML('afterbegin', notificationHTML);
+    }
+
+    function addSystemNotification(message, type = 'connection') {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-US');
+
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.innerHTML = `
+        <div class="notification-header">
+          <span class="notification-title">System Message</span>
+          <span class="notification-time">${timeString}</span>
+        </div>
+        <p>${message}</p>
+      `;
+      notificationsElement.appendChild(notification);
+    }
+
+    // Debug helper in console
+    window.debugSocket = () => {
+      console.log('Socket Debug Info:', {
+        connected: socket.connected,
+        id: socket.id,
+        events: Object.keys(socket._callbacks || {})
+      });
+    };
+  </script>
+</body>
+</html>

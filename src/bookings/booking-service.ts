@@ -10,7 +10,11 @@ export class BookingService {
     private getCachKey(id?: string): string {
         return id ? `booking:${id}` : 'allBookings';
     }
-    async create(createBooking: CreateBookings): Promise<string> {
+    async create(createBooking: CreateBookings): Promise<{
+        id: string,
+        roomId: string,
+        userId: string
+    }> {
 
         if(createBooking.startTime >= createBooking.endTime) {
             throw new Error ('Start-Time date must be before end-Time date')
@@ -33,7 +37,11 @@ export class BookingService {
         // Rensa relevant cache
         bookingCache.del(this.getCachKey()); 
 
-        return CreatingBooking;
+        return {
+            id: CreatingBooking,
+            roomId: createBooking.roomId,
+            userId: createBooking.userId,
+        };
     }
 
     async findAll(): Promise<Bookings[]> {
@@ -100,7 +108,12 @@ export class BookingService {
         return this.findOne(id)
     }
 
-    async delete(id: string): Promise<{ id: string; deleted: boolean }> {
+    async delete(id: string): Promise<{ 
+        id: string,
+        roomId: string,
+        userId: string,
+        deleted: boolean,
+        }> {
 
         const booking = await this.findOne(id)
 
@@ -113,6 +126,11 @@ export class BookingService {
             bookingCache.del(`room: ${booking.roomId}: availibility`)
         }
 
-        return {id, deleted: true};
+        return {
+            id,
+            roomId: booking.roomId,
+            userId: booking.userId,
+            deleted: true,
+        };
     }
 }

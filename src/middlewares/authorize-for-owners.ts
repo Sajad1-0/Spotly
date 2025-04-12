@@ -12,7 +12,7 @@ export const authorizeForOwners = async (req: AuthenticateRequest, res: Response
     const {userId: requesterUserId, role} = req.jwtPayload || {}
     
 
-    if(role === Role.Admin) next()
+    if(role === Role.Admin) return next()
         
     const {userId: ownerUserId} = await bookingService.findOne(bookingId);
     

@@ -3,6 +3,7 @@ import { AuthUtils } from "../middlewares/auth-utils";
 import { userRepository } from "./user-repository";
 import { Role } from "./user-roles";
 import NodeCache from "node-cache";
+import { logger } from "../utils/loggar";
 
 const authUtils = new AuthUtils();
 const userRepo = new userRepository();
@@ -25,6 +26,7 @@ export class UserService {
         })
 
         userCache.del(this.getCachKey())
+        logger.info('Chached Data has been updated')
 
         return createUsers
     }
@@ -37,7 +39,7 @@ export class UserService {
             return cachedUser
         }
 
-        console.log('Fetching users from database...')
+        logger.info('Fetching data from database....')
         const users = await userRepo.findAllUsers()
 
         userCache.set(cacheKey, users)
@@ -71,6 +73,7 @@ export class UserService {
         const updatedUser = await userRepo.update(id, updateUser)
         userCache.del(this.getCachKey(id)) // update the user
         userCache.del(this.getCachKey())
+
         return updatedUser
     }
 
@@ -88,14 +91,14 @@ export class UserService {
         const hashedPassword = await userRepo.getPassword(crendentials.username)
 
         if(!hashedPassword) {
-            console.warn(`The password doesn't match for this user: ${crendentials.username}`)
+            logger.error(`The password doesn't match for this user: ${crendentials.username}`)
             return null
         }
 
         const user = await userRepo.findUserByUsername(crendentials.username)
 
         if(!user) {
-            console.warn(`User with id: ${crendentials.username} doesn't exist`)
+            logger.error(`User with id: ${crendentials.username} doesn't exist`)
             return null
         }
 
@@ -104,7 +107,7 @@ export class UserService {
         )
 
         if(!correctCrendentials) {
-            console.warn(`Wrong password for user with username: ${crendentials.username}`)
+            logger.error(`Wrong password for user with username: ${crendentials.username}`)
             return null
         }
         

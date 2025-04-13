@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { JwtPayload } from '../interfaces/user-interface';
 import { Role } from '../users/user-roles';
+import { logger } from '../utils/loggar';
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ export class AuthUtils {
         try {
             return jwt.verify(token, secret) as JwtPayload;
         } catch (error) {
-            console.error(`Jwt verification error: ${error}`);
+            logger.error(`Jwt verification error: ${error}`);
             return null
         }
     }

@@ -1,4 +1,5 @@
 import { Bookings, CreateBookings, UpdateBooking } from "../interfaces/booking-interface";
+import { logger } from "../utils/loggar";
 import { bookingRepository } from "./booking-repository";
 import NodeCache from "node-cache";
 
@@ -17,6 +18,8 @@ export class BookingService {
     }> {
 
         if(createBooking.startTime >= createBooking.endTime) {
+            logger.error(`invalid start or end time has been given`)
+
             throw new Error ('Start-Time date must be before end-Time date')
         }
 
@@ -27,10 +30,14 @@ export class BookingService {
         )
 
         if (checkRoomAvailability.length > 0 ) {
+            logger.error(`Room is already booked at choosen tid
+                ${createBooking.startTime}, ${createBooking.endTime}`)
+
             throw new Error (`The room is already booked for the selected dates: 
                 ${createBooking.startTime}, ${createBooking.endTime}.
-                Please choose another date`)
+                Please choose another date`)    
         }
+        
 
         const CreatingBooking = await bookingService.create(createBooking)
 
@@ -50,11 +57,11 @@ export class BookingService {
     
 
         if(cachedBookings) {
-            console.log('Returns bookings from cache')
+            logger.info('Returns bookings from cache')
             return cachedBookings
         }
 
-        console.log('Fetching data from Database...')
+        logger.info('Fetching data from Database...')
 
         const bookings = await bookingService.findAllBookings();
         bookingCache.set(cacheKey, bookings);
@@ -67,11 +74,11 @@ export class BookingService {
         const cachedBookings = bookingCache.get<Bookings[]>(cacheKey);
 
         if (cachedBookings) {
-            console.log('Returns bookings from cache')
+            logger.info('Returns bookings from cache')
             return cachedBookings
         }
 
-        console.log('Fetching data from Database...')
+        logger.info('Fetching data from Database...')
 
         const bookings = await bookingService.findBookingsByUserId(userId);
         bookingCache.set(cacheKey, bookings);
@@ -84,7 +91,7 @@ export class BookingService {
         const cached = bookingCache.get<Bookings>(cacheKey)
 
         if (cached) {
-            console.log(`Data is cached`)
+            logger.info(`Cached data`)
             return cached
         }
 

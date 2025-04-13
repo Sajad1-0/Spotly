@@ -1,11 +1,13 @@
 import { Request, Response } from "express";
 import { httpCodeStatus } from "../httpStatus";
 import { BookingService } from "./booking-service";
+import { logger } from "../utils/loggar";
 
 const bookingController = new BookingService
 
 // Create booking
-export const createBooking = async (req: Request, res: Response) => {
+export const createBooking = async (req: any, res: Response) => {
+
     try {
         const bookingId = await bookingController.create(req.body)
 
@@ -16,35 +18,38 @@ export const createBooking = async (req: Request, res: Response) => {
             booking: bookingId
         })
 
-        console.log(bookingId)
+        logger.info(`A room has been booked`)
         res.status(httpCodeStatus.CREATED).json({
-            message: 'You succesfully create a booking', bookingId
+            message: 'You have succesfully booked a room', bookingId
         })
     }
     catch(err) {
-        console.log(err)
-        console.log()
-        res.status(httpCodeStatus.NOT_FOUND).json({
-            error: (err as Error).message
-        })
+        res.status(httpCodeStatus.INTERNAL_SERVER_ERROR).send(`
+            Something went wrong`)
     }
 }
 
 // get all bookings
 export const findAllBookings = async (req: any, res: Response) => {
-    const {role, userId} = req.jwtPayload || {}
+    const {username, role, userId} = req.jwtPayload || {}
 
 
     try {
         if (role === 'Admin') {
-            const bookings = await bookingController.findAll()
+            const bookings = await bookingController.findAll();
+
+            logger.info(`${username} has fetched bookings from database`)
+
             res.status(httpCodeStatus.OK).json(bookings)
         } else {
             const userBookings = await bookingController.findByUserId(userId);
 
             if (!userBookings || userBookings.length === 0) {
+
+                logger.error(`${username} tried to fetch bookings from database`)
+
                 res.status(httpCodeStatus.NOT_FOUND).send(`
-                    ${userId} has no bookings!`)
+                    ${username} has no bookings!`)
                 return
             }
 
@@ -55,6 +60,8 @@ export const findAllBookings = async (req: any, res: Response) => {
                 startTime: booking.startTime,
                 endTime: booking.endTime
             }))
+
+            logger.info(`${username} has get their bookings`)
 
             res.status(httpCodeStatus.OK).send(formattedBookings);
         }
@@ -88,11 +95,15 @@ export const findBookingById = async (req: Request, res: Response) => {
 }
 
 // delete booking 
-export const deleteBookingById = async (req: Request, res: Response) => {
+export const deleteBookingById = async (req: any, res: Response) => {
+    
+    const usernameFromToken = req.jwtPayload?.username || {}
+
     try {
         const bookingId = await bookingController.delete(req.params.id);
 
         if(!bookingId) {
+            logger.info(`Someone tried to delete a booking without inserting the booking id`)
             res.status(httpCodeStatus.BAD_REQUEST).json({
                 message: 'Booking Id required'
             })
@@ -105,19 +116,23 @@ export const deleteBookingById = async (req: Request, res: Response) => {
             booking: bookingId
         })
         
+        logger.info(`Booking has been deleted by ${usernameFromToken}`)
         res.status(httpCodeStatus.OK).json({
             message: 'Booking has been deleted', bookingId
         })
     } catch (error) {
-        res.status(httpCodeStatus.NOT_FOUND).json({
-            message: 'Booking has not been found'
+        res.status(httpCodeStatus.INTERNAL_SERVER_ERROR).json({
+            message: 'Something went wrong'
         })
     }
 }
 
 // update booking
 export const updateBookingById = async (
-    req: Request, res: Response) => {
+    req: any, res: Response) => {
+
+        const usernameFromToken = req.jwtPayload?.username;
+
         try {
             const updateId = await bookingController.update(
                 req.params.id,
@@ -137,6 +152,7 @@ export const updateBookingById = async (
                 booking: updateId
             })
 
+            logger.info(`Booking has been updated by ${usernameFromToken}`)
             res.status(httpCodeStatus.OK).json({
                 message: 'Booking has been updated', updateId
             })
@@ -146,4 +162,4 @@ export const updateBookingById = async (
                 message: 'Booking has not been found', error
             })
         }
-    }
+}

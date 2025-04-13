@@ -1,6 +1,8 @@
 import { CreateRoom, UpdateRoom } from "../interfaces/room-interface";
+import { logger } from "../utils/loggar";
 import { roomRepository } from "./rooms-Repository";
 import NodeCache from "node-cache";
+
 
 const roomService = new roomRepository();
 const roomCache = new NodeCache({stdTTL: 600, checkperiod:120}) 
@@ -27,7 +29,7 @@ export class RoomService {
             return cachedRooms
         }
 
-        console.log('Fetching data from Database...')
+        logger.info('Fetching data from Database...')
         const rooms = await roomService.findAllRooms()
 
         roomCache.set(cacheKey, rooms)
@@ -42,7 +44,7 @@ export class RoomService {
             return cachedRoom
         }
 
-        console.log('Fetching data from Database...')
+        logger.info('Fetching data from Database...')
         const room = await roomService.findOne(id)
 
         roomCache.set(cacheKey, room)

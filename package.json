@@ -10,15 +10,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Sajad1-0/Backend-spotly.git"
+    "url": "git+https://github.com/Sajad1-0/spotly.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Sajad1-0/Backend-spotly/issues"
+    "url": "https://github.com/Sajad1-0/spotly/issues"
   },
-  "homepage": "https://github.com/Sajad1-0/Backend-spotly#readme",
+  "homepage": "https://github.com/Sajad1-0/spotly#readme",
   "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",

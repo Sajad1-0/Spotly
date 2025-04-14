@@ -28,7 +28,7 @@ Or in production mode:
 ```bash
 npm run start
 ````
-The server will start on http://localhost:${port}
+The server will start on https://spotly-x8d0.onrender.com
 You can setup your own port in the .env file
 
 ## API Documentation

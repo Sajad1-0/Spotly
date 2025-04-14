@@ -45,6 +45,7 @@
     "@types/socket.io-client": "^1.4.36",
     "@types/winston": "^2.4.4",
     "drizzle-kit": "^0.30.5",
-    "tsx": "^4.19.3"
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
   }
 }

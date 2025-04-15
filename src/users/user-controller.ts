@@ -18,7 +18,7 @@ export const creatingUsers = async (req: Request, res: Response) => {
             message: 'User has been created', userId
         })
     } catch (error) {
-        logger.error(`❌ Fel vid skapande: ${(error as Error).message}`)
+        logger.error(`❌ Something went wrong: ${(error as Error).message}`)
 
         res.status(httpCodeStatus.NOT_FOUND).json({
             error: (error as Error).message

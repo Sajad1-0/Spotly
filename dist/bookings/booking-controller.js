@@ -47,8 +47,8 @@ const findAllBookings = async (req, res) => {
                 id: booking.id,
                 roomId: booking.roomId,
                 userId: booking.userId,
-                startTime: booking.startTime,
-                endTime: booking.endTime
+                startTime: booking.startDateAndTime,
+                endTime: booking.endDateAndTime
             }));
             loggar_1.logger.info(`${username} has get their bookings`);
             res.status(httpStatus_1.httpCodeStatus.OK).send(formattedBookings);
@@ -83,7 +83,7 @@ const findBookingById = async (req, res) => {
 exports.findBookingById = findBookingById;
 // delete booking 
 const deleteBookingById = async (req, res) => {
-    const usernameFromToken = req.jwtPayload?.username || {};
+    const usernameFromToken = req.jwtPayload?.username;
     try {
         const bookingId = await bookingController.delete(req.params.id);
         if (!bookingId) {

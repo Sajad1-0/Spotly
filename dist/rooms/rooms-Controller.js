@@ -16,10 +16,10 @@ const createRooms = async (req, res) => {
         return;
     }
     try {
-        const roomId = await roomsController.create(req.body);
-        loggar_1.logger.info(`Room has been created by ${username}`, roomId);
+        const createRoomId = await roomsController.create(req.body);
+        loggar_1.logger.info(`Room has been created by ${username}`, createRoomId);
         res.status(httpStatus_1.httpCodeStatus.CREATED)
-            .json({ message: 'Rooms Created', roomId });
+            .json({ message: 'Rooms Created', createRoomId });
     }
     catch (error) {
         res.status(httpStatus_1.httpCodeStatus.INTERNAL_SERVER_ERROR)
@@ -88,8 +88,8 @@ const updateRoomById = async (req, res) => {
             Only Admin can update rooms`);
     }
     try {
-        const updateId = await roomsController.updateRoom(req.params.id, req.body);
-        if (!updateId) {
+        const updatedRoomId = await roomsController.updateRoom(req.params.id, req.body);
+        if (!updatedRoomId) {
             res.status(httpStatus_1.httpCodeStatus.BAD_REQUEST).json({
                 message: 'Room Id is required'
             });
@@ -97,7 +97,7 @@ const updateRoomById = async (req, res) => {
         }
         loggar_1.logger.info(`Room has been updated by ${username}, Role: ${role}`);
         res.status(httpStatus_1.httpCodeStatus.OK).json({
-            message: 'Room has been updated', updateId
+            message: 'Room has been updated', updatedRoomId
         });
     }
     catch (error) {

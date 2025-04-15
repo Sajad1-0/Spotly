@@ -6,9 +6,9 @@ const httpStatus_1 = require("../httpStatus");
 const loggar_1 = require("../utils/loggar");
 const authorize = (requiredPermissions) => {
     return (req, res, next) => {
-        const { role, username } = req.jwtPayload;
+        const { role, username } = req.jwtPayload || {};
         if (!role) {
-            loggar_1.logger.error(`Someone tried to do some staff at system withoutv
+            loggar_1.logger.error(`Someone tried to do some staff at system without
                     beeing authenticated`);
             res.status(httpStatus_1.httpCodeStatus.NOT_AUTHENTICATED)
                 .send('User is not authenticated');

@@ -17,7 +17,7 @@ const creatingUsers = async (req, res) => {
         });
     }
     catch (error) {
-        loggar_1.logger.error(`❌ Fel vid skapande: ${error.message}`);
+        loggar_1.logger.error(`❌ Something went wrong: ${error.message}`);
         res.status(httpStatus_1.httpCodeStatus.NOT_FOUND).json({
             error: error.message
         });

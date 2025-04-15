@@ -5,9 +5,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RoomService = void 0;
 const loggar_1 = require("../utils/loggar");
-const rooms_Repository_1 = require("./rooms-Repository");
+const rooms_repository_1 = require("./rooms-repository");
 const node_cache_1 = __importDefault(require("node-cache"));
-const roomService = new rooms_Repository_1.roomRepository();
+const roomService = new rooms_repository_1.roomRepository();
 const roomCache = new node_cache_1.default({ stdTTL: 600, checkperiod: 120 });
 class RoomService {
     getCachKey(id) {

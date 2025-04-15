@@ -1,12 +1,12 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const authorize_utils_1 = require("../middlewares/authorize-utils");
-const rooms_Controller_1 = require("../rooms/rooms-Controller");
+const rooms_controller_1 = require("../rooms/rooms-controller");
 const express_1 = require("express");
 const router = (0, express_1.Router)();
-router.post('/', (0, authorize_utils_1.authorize)(['room:create']), rooms_Controller_1.createRooms);
-router.get('/', rooms_Controller_1.findAllRooms);
-router.delete('/:id', rooms_Controller_1.deleteRoomById);
-router.get('/:id', rooms_Controller_1.findRoomById);
-router.put('/:id', rooms_Controller_1.updateRoomById);
+router.post('/', (0, authorize_utils_1.authorize)(['room:create']), rooms_controller_1.createRooms);
+router.get('/', rooms_controller_1.findAllRooms);
+router.delete('/:id', rooms_controller_1.deleteRoomById);
+router.get('/:id', rooms_controller_1.findRoomById);
+router.put('/:id', rooms_controller_1.updateRoomById);
 exports.default = router;

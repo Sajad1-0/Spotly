@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { bookingSchema } from '../db/schema';
 import { eq, and, lte, gte, or } from 'drizzle-orm';
-import { db } from '../rooms/rooms-Repository';
+import { db } from '../rooms/rooms-repository';
 
 export  type CreateBookings = typeof bookingSchema.$inferInsert;
 export type updateBookings = Partial<CreateBookings>;
@@ -49,19 +49,19 @@ export class bookingRepository {
         return bookingId[0]
     }
 
-    async findBookingByRoomIdAndDate(roomId: string, startTme: string, 
-        endTime:string) {
+    async findBookingByRoomIdAndDate(roomId: string, startTme: Date, 
+        endTime: Date) {
             return await db.select()
             .from(bookingSchema)
             .where(and(eq(bookingSchema.roomId, roomId),
             or(
                 and(
-                    lte(bookingSchema.startTime, endTime),
-                    gte(bookingSchema.endTime, startTme)
+                    lte(bookingSchema.startTime, endTime.toISOString()),
+                    gte(bookingSchema.endTime, startTme.toISOString())
                 ),
                 and(
-                    lte(bookingSchema.startTime, startTme),
-                    gte(bookingSchema.endTime, endTime)
+                    lte(bookingSchema.startTime, startTme.toISOString()),
+                    gte(bookingSchema.endTime, endTime.toISOString())
                 )
             )))
     }

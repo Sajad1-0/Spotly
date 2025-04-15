@@ -10,6 +10,7 @@ import {Router} from "express";
 
 const router = Router();
 
+router.post('/register', creatingUsers);
 router.post('/', authorize(['user:create']), creatingUsers);
 router.get('/', findAllUsers);
 router.delete('/:id', authenticateToken, deleteUserById);

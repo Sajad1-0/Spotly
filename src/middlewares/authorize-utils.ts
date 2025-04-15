@@ -1,19 +1,20 @@
 import { Role, Permission, ROLES_WITH_PERMISSIONS } from "../users/user-roles";
 import { Response, NextFunction } from "express";
 import { httpCodeStatus } from "../httpStatus";
-import { JwtPayload } from "../interfaces/user-interface";
+import { jwtPayload } from "../interfaces/user-interface";
 import { logger } from "../utils/loggar";
 
 
 export const authorize = (requiredPermissions: Permission[]) => {
     return (req: any, res: Response, 
         next: NextFunction): void => {
-    
-            const { role, username } = req.jwtPayload as JwtPayload;
+            
+            // detta gör att man kan registrera sig utan att behöva en jwt
+            const { role, username } = req.jwtPayload as jwtPayload || {};
             
             if(!role) {
 
-                logger.error(`Someone tried to do some staff at system withoutv
+                logger.error(`Someone tried to do some staff at system without
                     beeing authenticated`)
                 res.status(httpCodeStatus.NOT_AUTHENTICATED)
                 .send('User is not authenticated');

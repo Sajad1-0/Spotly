@@ -57,8 +57,8 @@ export const findAllBookings = async (req: any, res: Response) => {
                 id: booking.id,
                 roomId: booking.roomId,
                 userId: booking.userId,
-                startTime: booking.startTime,
-                endTime: booking.endTime
+                startTime: booking.startDateAndTime,
+                endTime: booking.endDateAndTime
             }))
 
             logger.info(`${username} has get their bookings`)
@@ -97,7 +97,7 @@ export const findBookingById = async (req: Request, res: Response) => {
 // delete booking 
 export const deleteBookingById = async (req: any, res: Response) => {
     
-    const usernameFromToken = req.jwtPayload?.username || {}
+    const usernameFromToken = req.jwtPayload?.username 
 
     try {
         const bookingId = await bookingController.delete(req.params.id);

@@ -1,13 +1,13 @@
 import { Request, Response, NextFunction } from "express";
 import { Role } from "../users/user-roles";
 import { httpCodeStatus } from "../httpStatus";
-import { AuthenticateRequest } from "../interfaces/booking-interface";
+import { authenticateRequest } from "../interfaces/booking-interface";
 import { BookingService } from "../bookings/booking-service";
 import { logger } from "../utils/loggar";
 
 const bookingService = new BookingService();
 
-export const authorizeForOwners = async (req: AuthenticateRequest, res: Response, next: NextFunction) => {
+export const authorizeForOwners = async (req: authenticateRequest, res: Response, next: NextFunction) => {
     
     const bookingId = req.params.id;
     const {userId: requesterUserId, role} = req.jwtPayload || {}

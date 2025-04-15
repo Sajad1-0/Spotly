@@ -20,11 +20,11 @@ export const createRooms = async (req: any, res: Response) => {
     }
 
     try {
-        const roomId = await roomsController.create(req.body);
-        logger.info(`Room has been created by ${username}`, roomId)
+        const createRoomId = await roomsController.create(req.body);
+        logger.info(`Room has been created by ${username}`, createRoomId)
 
         res.status(httpCodeStatus.CREATED)
-        .json({message: 'Rooms Created', roomId})
+        .json({message: 'Rooms Created', createRoomId})
     }
     catch (error) {
         res.status(httpCodeStatus.INTERNAL_SERVER_ERROR)
@@ -106,9 +106,9 @@ export const updateRoomById = async (req: any, res: Response) => {
     }
 
     try {
-        const updateId = await roomsController.updateRoom(req.params.id, req.body);
+        const updatedRoomId = await roomsController.updateRoom(req.params.id, req.body);
 
-        if(!updateId) {
+        if(!updatedRoomId) {
             res.status(httpCodeStatus.BAD_REQUEST).json({
                 message: 'Room Id is required'
             })
@@ -117,7 +117,7 @@ export const updateRoomById = async (req: any, res: Response) => {
 
         logger.info(`Room has been updated by ${username}, Role: ${role}`)
         res.status(httpCodeStatus.OK).json({
-            message: 'Room has been updated', updateId
+            message: 'Room has been updated', updatedRoomId
         })
         
     } catch (error) {

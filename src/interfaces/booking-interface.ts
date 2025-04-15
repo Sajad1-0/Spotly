@@ -1,7 +1,7 @@
 import { Role } from "../users/user-roles";
 import { Request } from "express";
 
-export interface Booking {
+export interface booking {
     id: string;
     roomId: string;
     userId: string;
@@ -9,21 +9,21 @@ export interface Booking {
     endTime: string;
 }
 
-export interface UpdateBooking {
+export interface updateBooking {
     roomId?: string;
     userId?: string;
     startTime?: string;
     endTime?: string;
 }
 
-export interface CreateBookings extends Omit<Booking, 'id'> {}
-export interface Bookings extends Omit<Booking, 'id'> {}
+export interface createBookings extends Omit<booking, 'id'> {}
+export interface bookingsWithoutId extends Omit<booking, 'id'> {}
 
-export interface JwtToken {
+export interface jwtToken {
     userId: string,
     role: Role,
 }
 
-export interface AuthenticateRequest extends Request {
-    jwtPayload?: JwtToken;
+export interface authenticateRequest extends Request {
+    jwtPayload?: jwtToken;
 }

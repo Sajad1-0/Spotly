@@ -1,13 +1,13 @@
 import { AuthUtils } from "./auth-utils";
 import { httpCodeStatus } from "../httpStatus";
 import { Request, Response, NextFunction } from "express";
-import { AuthenticateRequest } from "../interfaces/user-interface";
+import { authenticateRequest } from "../interfaces/user-interface";
 import { logger } from "../utils/loggar";
 
 const authUtils = new AuthUtils();
 
 export const authenticateToken = async (
-    req: AuthenticateRequest, res: Response, next: NextFunction): Promise <any> => {
+    req: authenticateRequest, res: Response, next: NextFunction): Promise <any> => {
         const token = req.headers.authorization?.split(' ')[1]; 
 
         if(!token) return next();

@@ -1,9 +1,22 @@
-import { Bookings, CreateBookings, UpdateBooking } from "../interfaces/booking-interface";
+import { bookingsWithoutId, createBookings, updateBooking } from "../interfaces/booking-interface";
 import { logger } from "../utils/loggar";
 import { bookingRepository } from "./booking-repository";
 import NodeCache from "node-cache";
 
 const bookingService = new bookingRepository();
+
+
+/* stdTTL: Standard time-to-liv. Det säkerställer att varje cache-post automatiskt
+förfallaer efter en vid tid, i detta fall 600sekunder = 10min
+
+checkperiod: Det genomsöka hela cachen och kollar alla lagrade nyckler samt 
+identifierar vilka cache som har gått ut och behövs att tas bort från minnet.
+Detta görs efter en viss tid, i detta fallet 120sek = 2min a
+
+Med andra ord den rensar och uppdaterar cache minnet efter en viss tid
+*/
+
+
 const bookingCache = new NodeCache({stdTTL: 600, checkperiod: 120})
 export class BookingService {
 
@@ -11,13 +24,16 @@ export class BookingService {
     private getCachKey(id?: string): string {
         return id ? `booking:${id}` : 'allBookings';
     }
-    async create(createBooking: CreateBookings): Promise<{
+    async create(createBooking: createBookings): Promise<{
         id: string,
         roomId: string,
         userId: string
     }> {
 
-        if(createBooking.startTime >= createBooking.endTime) {
+        const startDateAndTime = new Date(createBooking.startTime);
+        const endDateAndTime = new Date(createBooking.endTime);
+
+        if(startDateAndTime >= endDateAndTime) {
             logger.error(`invalid start or end time has been given`)
 
             throw new Error ('Start-Time date must be before end-Time date')
@@ -25,12 +41,12 @@ export class BookingService {
 
         const checkRoomAvailability = await bookingService.findBookingByRoomIdAndDate(
             createBooking.roomId,
-            createBooking.startTime,
-            createBooking.endTime
+            startDateAndTime,
+            endDateAndTime
         )
 
         if (checkRoomAvailability.length > 0 ) {
-            logger.error(`Room is already booked at choosen tid
+            logger.error(`Room is already booked at choosen time
                 ${createBooking.startTime}, ${createBooking.endTime}`)
 
             throw new Error (`The room is already booked for the selected dates: 
@@ -39,21 +55,21 @@ export class BookingService {
         }
         
 
-        const CreatingBooking = await bookingService.create(createBooking)
+        const createdBookingId = await bookingService.create(createBooking)
 
         // Rensa relevant cache
         bookingCache.del(this.getCachKey()); 
 
         return {
-            id: CreatingBooking,
+            id: createdBookingId,
             roomId: createBooking.roomId,
             userId: createBooking.userId,
         };
     }
 
-    async findAll(): Promise<Bookings[]> {
+    async findAll(): Promise<bookingsWithoutId[]> {
         const cacheKey = this.getCachKey();
-        const cachedBookings = bookingCache.get<Bookings[]>(cacheKey);
+        const cachedBookings = bookingCache.get<bookingsWithoutId[]>(cacheKey);
     
 
         if(cachedBookings) {
@@ -69,9 +85,9 @@ export class BookingService {
         return bookings
     }
 
-    async findByUserId(userId: string): Promise<Bookings[]> {
+    async findByUserId(userId: string): Promise<bookingsWithoutId[]> {
         const cacheKey = this.getCachKey(userId);
-        const cachedBookings = bookingCache.get<Bookings[]>(cacheKey);
+        const cachedBookings = bookingCache.get<bookingsWithoutId[]>(cacheKey);
 
         if (cachedBookings) {
             logger.info('Returns bookings from cache')
@@ -86,9 +102,9 @@ export class BookingService {
         return bookings
     }
 
-    async findOne(id: string): Promise<Bookings> {
+    async findOne(id: string): Promise<bookingsWithoutId> {
         const cacheKey = this.getCachKey(id);
-        const cached = bookingCache.get<Bookings>(cacheKey)
+        const cached = bookingCache.get<bookingsWithoutId>(cacheKey)
 
         if (cached) {
             logger.info(`Cached data`)
@@ -101,7 +117,7 @@ export class BookingService {
         return booking;
     }
 
-    async update(id: string, updateBooking: UpdateBooking) {
+    async update(id: string, updateBooking: updateBooking) {
 
          await bookingService.update(id, updateBooking)
 

@@ -1,14 +1,14 @@
-export interface Room {
+export interface room {
     id: string,
     name: string,
     capacity: number,
     type: 'Workspace' | 'Conference'
 }
 
-export interface UpdateRoom {
+export interface updateRoom {
     name?: string,
     capacity?: number,
     type?: 'Workspace' | 'Conference'
 }
 
-export interface CreateRoom extends Omit<Room, "id"> {}
+export interface createRoom extends Omit<room, "id"> {}

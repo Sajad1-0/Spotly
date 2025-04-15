@@ -2,22 +2,22 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.userRepository = void 0;
 const schema_1 = require("../db/schema");
-const rooms_Repository_1 = require("../rooms/rooms-Repository");
+const rooms_repository_1 = require("../rooms/rooms-repository");
 const drizzle_orm_1 = require("drizzle-orm");
 class userRepository {
     async create(createUser) {
-        const CreatedUser = await rooms_Repository_1.db.insert(schema_1.userSchema)
+        const CreatedUser = await rooms_repository_1.db.insert(schema_1.userSchema)
             .values(createUser)
             .returning({ insertedId: schema_1.userSchema.id });
         return CreatedUser[0].insertedId;
     }
     async findAllUsers() {
-        const allUsers = await rooms_Repository_1.db.select()
+        const allUsers = await rooms_repository_1.db.select()
             .from(schema_1.userSchema);
         return allUsers.map(({ password, ...usersWithoutPassword }) => usersWithoutPassword);
     }
     async findUserByUsername(username) {
-        const findUser = await rooms_Repository_1.db.select()
+        const findUser = await rooms_repository_1.db.select()
             .from(schema_1.userSchema)
             .where((0, drizzle_orm_1.eq)(schema_1.userSchema.username, username));
         if (findUser.length === 0) {
@@ -26,7 +26,7 @@ class userRepository {
         return findUser[0];
     }
     async findUserById(id) {
-        const findUserById = await rooms_Repository_1.db.select()
+        const findUserById = await rooms_repository_1.db.select()
             .from(schema_1.userSchema)
             .where((0, drizzle_orm_1.eq)(schema_1.userSchema.id, id));
         if (findUserById.length === 0) {
@@ -36,7 +36,7 @@ class userRepository {
         return userWithoutPassword;
     }
     async update(id, updateUser) {
-        const updateRooms = await rooms_Repository_1.db.update(schema_1.userSchema)
+        const updateRooms = await rooms_repository_1.db.update(schema_1.userSchema)
             .set(updateUser)
             .where((0, drizzle_orm_1.eq)(schema_1.userSchema.id, id))
             .returning({ updateId: schema_1.userSchema.id });
@@ -49,7 +49,7 @@ class userRepository {
         if (!id) {
             throw new Error('User Id required');
         }
-        const deleteUser = await rooms_Repository_1.db.delete(schema_1.userSchema)
+        const deleteUser = await rooms_repository_1.db.delete(schema_1.userSchema)
             .where((0, drizzle_orm_1.eq)(schema_1.userSchema.id, id))
             .returning();
         if (deleteUser.length === 0) {
@@ -58,7 +58,7 @@ class userRepository {
         return deleteUser[0].id;
     }
     async getPassword(username) {
-        const userInfo = await rooms_Repository_1.db.select()
+        const userInfo = await rooms_repository_1.db.select()
             .from(schema_1.userSchema)
             .where((0, drizzle_orm_1.eq)(schema_1.userSchema.username, username));
         console.log(userInfo);

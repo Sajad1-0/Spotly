@@ -4,7 +4,7 @@ import {
     deleteRoomById, 
     findAllRooms, 
     findRoomById, 
-    updateRoomById} from "../rooms/rooms-Controller";
+    updateRoomById} from "../rooms/rooms-controller";
 import { Router } from "express";
 
 const router = Router()

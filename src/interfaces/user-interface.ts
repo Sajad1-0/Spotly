@@ -8,26 +8,26 @@ export interface User {
     role: "User" | "Admin";
 }
 
-export interface updateUser {
+export interface UpdateUser {
     username?: string;
     password: string;
     role?: "User" | "Admin";
 }
 
-export interface userWithoutPassword extends Omit<User, "password"> {}
-export interface createUser extends Omit<User, "id"> {}
-export interface userCrendentials {
+export interface UserWithoutPassword extends Omit<User, "password"> {}
+export interface CreateUser extends Omit<User, "id"> {}
+export interface UserCrendentials {
     username: string;
     password: string;
     role: Role;
 }
 
-export interface jwtPayload {
+export interface JwtPayload {
     userId: string;
     username: string;
     role: Role
 }
 
-export interface authenticateRequest extends Request {
-    jwtPayload?: jwtPayload
+export interface AuthenticateRequest extends Request {
+    jwtPayload?: JwtPayload
 }

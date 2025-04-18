@@ -1,4 +1,4 @@
-import { userCrendentials, createUser, updateUser } from "../interfaces/user-interface";
+import { UserCrendentials, CreateUser, UpdateUser } from "../interfaces/user-interface";
 import { AuthUtils } from "../middlewares/auth-utils";
 import { userRepository } from "./user-repository";
 import { Role } from "./user-roles";
@@ -16,7 +16,7 @@ export class UserService {
     }
 
     // create user
-    async create(createUser: createUser): Promise<string> {
+    async create(createUser: CreateUser): Promise<string> {
         const hashedPassword = await authUtils.hashPassword(createUser.password);
 
         const createUsers = await userRepo.create({
@@ -62,7 +62,7 @@ export class UserService {
         return userId
     }
 
-    async update(id: string, updateUser: updateUser) {
+    async update(id: string, updateUser: UpdateUser) {
 
 
         // bycrypt password if it has been updated
@@ -87,7 +87,7 @@ export class UserService {
         return deleteUser
     }
 
-    async login(crendentials: userCrendentials): Promise<string | null> {
+    async login(crendentials: UserCrendentials): Promise<string | null> {
         const hashedPassword = await userRepo.getPassword(crendentials.username)
 
         if(!hashedPassword) {

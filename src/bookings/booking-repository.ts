@@ -4,9 +4,9 @@ import { eq, and, lte, gte, or } from 'drizzle-orm';
 import { db } from '../rooms/rooms-repository';
 
 export  type CreateBookings = typeof bookingSchema.$inferInsert;
-export type updateBookings = Partial<CreateBookings>;
+export type UpdateBookings = Partial<CreateBookings>;
 
-export class bookingRepository {
+export class BookingRepository {
 
     async create(createBooking: CreateBookings): Promise<string> {
         const createBookings = await db.insert(bookingSchema)
@@ -15,7 +15,7 @@ export class bookingRepository {
         return createBookings[0].insertId
     }
 
-    async update(id: string, updateBookings: updateBookings): Promise<string> {
+    async update(id: string, updateBookings: UpdateBookings): Promise<string> {
         const updateBooking = await db.update(bookingSchema)
         .set(updateBookings)
         .where(eq(bookingSchema.id, id))

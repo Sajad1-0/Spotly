@@ -1,7 +1,7 @@
 import { Role, Permission, ROLES_WITH_PERMISSIONS } from "../users/user-roles";
 import { Response, NextFunction } from "express";
 import { httpCodeStatus } from "../httpStatus";
-import { jwtPayload } from "../interfaces/user-interface";
+import { JwtPayload } from "../interfaces/user-interface";
 import { logger } from "../utils/loggar";
 
 
@@ -10,7 +10,7 @@ export const authorize = (requiredPermissions: Permission[]) => {
         next: NextFunction): void => {
             
             // detta gör att man kan registrera sig utan att behöva en jwt
-            const { role, username } = req.jwtPayload as jwtPayload || {};
+            const { role, username } = req.jwtPayload as JwtPayload || {};
             
             if(!role) {
 

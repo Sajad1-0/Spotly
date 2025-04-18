@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { jwtPayload } from '../interfaces/user-interface';
+import { JwtPayload } from '../interfaces/user-interface';
 import { Role } from '../users/user-roles';
 import { logger } from '../utils/loggar';
 
@@ -25,9 +25,9 @@ export class AuthUtils {
     }
 
 
-    async verifyToken(token: string): Promise<jwtPayload | null> {
+    async verifyToken(token: string): Promise<JwtPayload | null> {
         try {
-            return jwt.verify(token, secret) as jwtPayload;
+            return jwt.verify(token, secret) as JwtPayload;
         } catch (error) {
             logger.error(`Jwt verification error: ${error}`);
             return null

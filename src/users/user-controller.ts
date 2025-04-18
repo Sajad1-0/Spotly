@@ -1,7 +1,7 @@
 import { Response, Request } from "express";
 import { UserService } from "./user-service";
 import { httpCodeStatus } from "../httpStatus";
-import { createUser, updateUser, userCrendentials, authenticateRequest } from "../interfaces/user-interface";
+import { CreateUser, UpdateUser, UserCrendentials, AuthenticateRequest } from "../interfaces/user-interface";
 import { logger } from "../utils/loggar";
 
 const userService = new UserService();
@@ -9,7 +9,7 @@ const userService = new UserService();
 // create user
 export const creatingUsers = async (req: Request, res: Response) => {
     
-    const createUser = req.body as createUser;
+    const createUser = req.body as CreateUser;
     try {
         const userId = await userService.create(createUser);
 
@@ -58,7 +58,7 @@ export const findAllUsers = async (req: any, res: Response) => {
     }
 }
 
-export const findUserById = async (req: authenticateRequest, res: Response) => {
+export const findUserById = async (req: AuthenticateRequest, res: Response) => {
 
     const userInfoToGet = req.params.id;
     const {username, role, userId} = req.jwtPayload || {}
@@ -100,7 +100,7 @@ export const findUserById = async (req: authenticateRequest, res: Response) => {
 }
 
 // delete user
-export const deleteUserById = async (req: authenticateRequest, res: Response) => {
+export const deleteUserById = async (req: AuthenticateRequest, res: Response) => {
     const userIdFromParams = req.params.id;
     const {userId, role, username} = req.jwtPayload || {}
     
@@ -133,10 +133,10 @@ export const deleteUserById = async (req: authenticateRequest, res: Response) =>
 
 // update user
 
-export const updateUserById = async (req: authenticateRequest, res: Response) => {
+export const updateUserById = async (req: AuthenticateRequest, res: Response) => {
     const {userId, username, role} = req.jwtPayload || {}
     const userIdFromParams = req.params.id;
-    const updateUser = req.body as updateUser
+    const updateUser = req.body as UpdateUser
 
     if(userIdFromParams !== userId) {
         logger.error(`Users aren't allowed to update other users, This user: 
@@ -166,7 +166,7 @@ export const updateUserById = async (req: authenticateRequest, res: Response) =>
 }
 
 export const loginUser = async (req: Request, res: Response) => {
-    const userLogin = req.body as userCrendentials;
+    const userLogin = req.body as UserCrendentials;
     const jwt = await userService.login(userLogin);
     
     if (!jwt) {

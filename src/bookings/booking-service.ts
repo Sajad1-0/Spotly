@@ -1,9 +1,9 @@
-import { bookingsWithoutId, createBookings, updateBooking } from "../interfaces/booking-interface";
+import { BookingsWithoutId, CreateBookings, UpdateBooking } from "../interfaces/booking-interface";
 import { logger } from "../utils/loggar";
-import { bookingRepository } from "./booking-repository";
+import { BookingRepository } from "./booking-repository";
 import NodeCache from "node-cache";
 
-const bookingService = new bookingRepository();
+const bookingService = new BookingRepository();
 
 
 /* stdTTL: Standard time-to-liv. Det säkerställer att varje cache-post automatiskt
@@ -24,7 +24,7 @@ export class BookingService {
     private getCachKey(id?: string): string {
         return id ? `booking:${id}` : 'allBookings';
     }
-    async create(createBooking: createBookings): Promise<{
+    async create(createBooking: CreateBookings): Promise<{
         id: string,
         roomId: string,
         userId: string
@@ -67,9 +67,9 @@ export class BookingService {
         };
     }
 
-    async findAll(): Promise<bookingsWithoutId[]> {
+    async findAll(): Promise<BookingsWithoutId[]> {
         const cacheKey = this.getCachKey();
-        const cachedBookings = bookingCache.get<bookingsWithoutId[]>(cacheKey);
+        const cachedBookings = bookingCache.get<BookingsWithoutId[]>(cacheKey);
     
 
         if(cachedBookings) {
@@ -85,9 +85,9 @@ export class BookingService {
         return bookings
     }
 
-    async findByUserId(userId: string): Promise<bookingsWithoutId[]> {
+    async findByUserId(userId: string): Promise<BookingsWithoutId[]> {
         const cacheKey = this.getCachKey(userId);
-        const cachedBookings = bookingCache.get<bookingsWithoutId[]>(cacheKey);
+        const cachedBookings = bookingCache.get<BookingsWithoutId[]>(cacheKey);
 
         if (cachedBookings) {
             logger.info('Returns bookings from cache')
@@ -102,9 +102,9 @@ export class BookingService {
         return bookings
     }
 
-    async findOne(id: string): Promise<bookingsWithoutId> {
+    async findOne(id: string): Promise<BookingsWithoutId> {
         const cacheKey = this.getCachKey(id);
-        const cached = bookingCache.get<bookingsWithoutId>(cacheKey)
+        const cached = bookingCache.get<BookingsWithoutId>(cacheKey)
 
         if (cached) {
             logger.info(`Cached data`)
@@ -117,7 +117,7 @@ export class BookingService {
         return booking;
     }
 
-    async update(id: string, updateBooking: updateBooking) {
+    async update(id: string, updateBooking: UpdateBooking) {
 
          await bookingService.update(id, updateBooking)
 

@@ -1,4 +1,4 @@
-import { createRoom, updateRoom } from "../interfaces/room-interface";
+import { CreateRoom, UpdateRoom } from "../interfaces/room-interface";
 import { logger } from "../utils/loggar";
 import { roomRepository } from "./rooms-repository";
 import NodeCache from "node-cache";
@@ -12,7 +12,7 @@ export class RoomService {
     private getCachKey(id?: string ): string {
         return id ? `room:${id}` : 'allRooms'
     }
-    async create(room: createRoom) {
+    async create(room: CreateRoom) {
         
         const createRooms = await roomService.create(room)
 
@@ -51,7 +51,7 @@ export class RoomService {
         return room
     }
 
-    async updateRoom(id: string, updateRoom: updateRoom) {
+    async updateRoom(id: string, updateRoom: UpdateRoom) {
 
         const roomUpdate = await roomService.update(id, updateRoom)
 

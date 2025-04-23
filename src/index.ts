@@ -7,9 +7,12 @@ import { drizzle } from 'drizzle-orm/node-postgres';
 import { authenticateToken } from './middlewares/auth-utils-service';
 import { socketSetup } from './socket';
 import cors from 'cors'
- 
+
 dotenv.config();
 
+const corsOptions = {
+  origin: ["http://localhost:5173"],
+}
 
 const app: Express = express();
 const {httpServer, io} = socketSetup(app)
@@ -20,7 +23,7 @@ app.set('io', io) // Spara io-instansen så router kan komma åt den.
 export const db = drizzle(process.env.DATABASE_URL!);
 
 // middleware 
-app.use(cors())
+app.use(cors(corsOptions))
 app.use(express.static('client'))
 app.use(express.json());
 app.use(authenticateToken)

@@ -2,4 +2,3 @@ node_modules
 .env
 Request.rest
 logs/
-dist

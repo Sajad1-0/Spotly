@@ -6,7 +6,9 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts",
+    "admin": "npm run start --prefix admin",
+    "dev":    "nodemon src/index.ts",
+    "dev-admin": "concurrently \"npm run server\" \"npm run admin\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -24,6 +26,7 @@
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cache": "^3.0.0",
+    "concurrently": "^9.1.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "drizzle-orm": "^0.40.0",

@@ -1,4 +1,5 @@
-import { Outlet, Link } from "react-router"
+import { Outlet} from "react-router"
+import MenuNavigation from "./components/menuNavigation/MenuNavigation"
 
 
 function App() {
@@ -6,13 +7,7 @@ function App() {
 
   return (
     <div>
-      <nav>
-        <Link to="/">Home</Link>
-        <Link to= "/register">Register</Link>
-        <Link to= "/login">Login</Link>
-      </nav>
-
-
+      <MenuNavigation/>
       <Outlet/>
     </div>
   )

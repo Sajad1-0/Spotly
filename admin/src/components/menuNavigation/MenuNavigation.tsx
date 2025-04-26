@@ -13,7 +13,7 @@ const MenuNavigation = () => {
   return (
     <div className="w-full flex gap-20">
         {/* Logo for application */}
-        <div>
+        <div className="z-10">
             <Link to='/'>
                 <img src={Logo} alt="Application Logo" 
                 className="w-24 lg:w-40 m-6" />
@@ -21,32 +21,34 @@ const MenuNavigation = () => {
         </div>
 
         
-        <div className="w-full flex md:justify-between lg:justify-around ">
+        <div className="w-full flex md:justify-between lg:justify-around z-10">
 
         {/* Left side of Menu Navigation */}
             <div className="py-2 m-4 lg:m-6">
                 <NavigationMenu>
                     <NavigationMenuList>
                         <NavigationMenuItem className="flex gap-10">
-                            <NavigationMenuTrigger className="text-md px-4 py-2 transition-colors 
-                                data-[state=open]:bg-[#0284c7]
-                                hover:bg-[#0284c7]
-                                data-[state=open]:hover:bg-[#0284c7]
-                                data-[state=open]:focus:bg-[#0284c7] 
+                            <NavigationMenuTrigger className="text-md lg:text-xl
+                                bg-transparent transition-colors 
+                                data-[state=open]:bg-transparent
+                                hover:bg-transparent
+                                focus:bg-transparent
+                                data-[state=open]:hover:bg-transparent
+                                data-[state=open]:focus:bg-transparent
                                 ">
                                 Rooms
                             </NavigationMenuTrigger>
-                            <NavigationMenuContent >
+                            <NavigationMenuContent>
                                 <ul className="flex flex-col gap-3 p-2 w-[150px]">
                                     <li>
                                         <NavigationMenuLink asChild
-                                        className="hover:bg-[#0284c7] transition-colors">
+                                        className="hover:bg-[#a16207] transition-colors lg:text-md">
                                             <Link to="/rooms:workspace">Workspace Rooms</Link>
                                         </NavigationMenuLink>
                                     </li>
                                     <li>
                                         <NavigationMenuLink
-                                        className="hover:bg-[#0284c7] transition-colors">
+                                        className="hover:bg-[#a16207] transition-colors">
                                             <Link to="/rooms:conference">Conference Rooms</Link>
                                         </NavigationMenuLink>
                                     </li>
@@ -54,7 +56,8 @@ const MenuNavigation = () => {
                             </NavigationMenuContent>
                             <Link to="/bookings">
                                 <NavigationMenuLink className={`${navigationMenuTriggerStyle()}
-                                text-md px-4 py-2 hover:bg-[#0284c7]`}>
+                                text-md lg:text-xl px-4 py-2 focus:bg-[#a16207] 
+                                hover:bg-transparent bg-transparent`}>
                                     Bookings
                                 </NavigationMenuLink>
                             </Link>
@@ -64,18 +67,19 @@ const MenuNavigation = () => {
             </div>
 
             {/* Right side of menu */}
-            <div className="py-2 m-4 flex gap-8 lg:py-0 ">
+            <div className="py-2 m-4 flex">
                 <NavigationMenu>
                     <NavigationMenuList>
                         <Link to="/login">
                             <NavigationMenuLink className={`${navigationMenuTriggerStyle()} 
-                            text-md px-4 py-2 hover:bg-[#0284c7]`}>
+                            text-md lg:text-xl px-4 py-2 
+                            hover:bg-transparent bg-transparent`}>
                                 Login
                             </NavigationMenuLink>
                         </Link>
                         <Link to="/register">
                             <NavigationMenuLink className={`${navigationMenuTriggerStyle()} 
-                            text-md px-4 py-2 hover:bg-[#0284c7]`}>
+                            text-md lg:text-xl px-4 py-2 hover:bg-[#a16207]`}>
                                 Register
                             </NavigationMenuLink>
                         </Link>

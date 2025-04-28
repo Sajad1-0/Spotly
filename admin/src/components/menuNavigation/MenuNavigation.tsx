@@ -28,6 +28,7 @@ const MenuNavigation = () => {
                 <NavigationMenu>
                     <NavigationMenuList>
                         <NavigationMenuItem className="flex gap-10">
+                            <Link to="/rooms">
                             <NavigationMenuTrigger className="text-md lg:text-xl
                                 bg-transparent transition-colors 
                                 data-[state=open]:bg-transparent
@@ -38,6 +39,8 @@ const MenuNavigation = () => {
                                 ">
                                 Rooms
                             </NavigationMenuTrigger>
+                            </Link>
+                           
                             <NavigationMenuContent>
                                 <ul className="flex flex-col gap-3 p-2 w-[150px]">
                                     <li>

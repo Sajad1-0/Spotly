@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { bookingSchema } from '../db/schema';
 import { eq, and, lte, gte, or } from 'drizzle-orm';
-import { db } from '../rooms/rooms-repository';
+import { db } from '../rooms/rooms-Repository';
 
 export  type CreateBookings = typeof bookingSchema.$inferInsert;
 export type UpdateBookings = Partial<CreateBookings>;

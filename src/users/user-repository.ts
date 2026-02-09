@@ -1,5 +1,5 @@
 import { userSchema } from '../db/schema';
-import { db } from '../rooms/rooms-repository';
+import { db } from '../rooms/rooms-Repository';
 import { eq} from 'drizzle-orm';
 import { User, UserWithoutPassword } from '../interfaces/user-interface';
 
